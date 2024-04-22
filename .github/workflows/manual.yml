@@ -19,7 +19,7 @@ jobs:
       uses: actions/checkout@v2
       with:
         repository: rohail3107/rohail3107.github.portfolio
-        token: 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
+        token: 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
 
     - name: Configure Git
       run: |
