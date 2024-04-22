@@ -1,0 +1,43 @@
+name: Sync with Remote Repository
+
+on:
+  push:
+    branches:
+      - master
+  schedule:
+    - cron: '*/2 * * * *'
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Validate repository URL
+      run: echo "Repository URL is rohail3107/rohail3107.github.portfolio"
+
+    - name: Checkout code from remote repo
+      uses: actions/checkout@v2
+      with:
+        repository: rohail3107/rohail3107.github.portfolio
+        token: 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
+
+    - name: Configure Git
+      run: |
+        git config --global user.email "action@github.com"
+        git config --global user.name "GitHub Action"
+
+    - name: Fetch latest changes from remote
+      run: git fetch origin
+
+    - name: Check for new commits
+      id: check_commits
+      run: |
+        latest_hash=$(git rev-parse HEAD)
+        remote_hash=$(git rev-parse origin/master)
+        if [ "$latest_hash" != "$remote_hash" ]; then
+          echo "New commit detected"
+          git pull origin master
+          git push origin master
+        else
+          echo "No new commits"
+        fi
